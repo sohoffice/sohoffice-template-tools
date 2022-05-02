@@ -3,11 +3,14 @@ A template tool that processes the variable input directly from the filesystem.
 Inspiration
 ===========
 
+From time to time, we always have the need to run template for all developers. 
+However, having to install dependency such as mustache executable has been annoying.
+
 This tool is a perfect fit when packaged as a docker image. Inputs can be passed
 in via docker volume parameters. And those who need to run this doesn't have to 
 have any executable installed.
 
-Published as docker image `sohoffice/tempalte-tools`
+Published as docker image: `sohoffice/tempalte-tools`
 
 Running example
 ===============
