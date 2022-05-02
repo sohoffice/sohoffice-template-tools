@@ -4,10 +4,10 @@ Inspiration
 ===========
 
 This tool is a perfect fit when packaged as a docker image. Inputs can be passed
-in via docker parameters. And those who need this doesn't have to have any executable
-installed.
+in via docker volume parameters. And those who need to run this doesn't have to 
+have any executable installed.
 
-This will be published as docker image `sohoffice/tempalte-tools`
+Published as docker image `sohoffice/tempalte-tools`
 
 Running example
 ===============
@@ -20,6 +20,14 @@ docker run -it --rm \
     -v "$PWD/sample/vars:/app/vars" \
     sohoffice/tempalte-tools:latest
 ```
+
+Docker volumes
+==============
+
+| Path           | Description                                    |
+|----------------|------------------------------------------------|
+| /app/main.tmpl | The main template file. Must be a Jinja2 file. |
+| /app/vars      | The directory to contain all variables.        |
 
 Usage
 =====
