@@ -9,3 +9,4 @@ fi
 cd $BASEDIR
 
 docker build -f $BASEDIR/docker/Dockerfile -t sohoffice/tempalte-tools:$VERSION .
+docker push sohoffice/tempalte-tools:$VERSION
