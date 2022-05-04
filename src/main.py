@@ -27,10 +27,6 @@ def main(tmpl_file, var_dir, format_type):
     """
     logger.info(f"Template file: {tmpl_file}, variable directory: {var_dir}")
     main_content = tmpl_file.read()
-    env = Environment(loader=DictLoader({
-        'main': main_content
-    }))
-    tmpl = env.get_template('main')
     the_vars = {}
     formatter = select_formatter(format_type)
     for p in os.listdir(var_dir):
@@ -39,8 +35,23 @@ def main(tmpl_file, var_dir, format_type):
             the_vars[p] = formatter(read_dir(a_path))
         else:
             the_vars[p] = formatter(read_file(a_path))
+    # Collect all variables and maintemplate into the_templates
+    the_templates = the_vars.copy()
+    the_templates['$main'] = main_content
+    env = Environment(loader=DictLoader(the_templates))
+    # Enhance the variables with environment variables
+    the_vars['env'] = os.environ
+    the_vars_keys = list(the_vars.keys())
+    the_vars_keys.sort()
+    for k in the_vars_keys:
+        if k == 'env':
+            continue
+        var_tmpl = env.get_template(k)
+        the_vars[k] = var_tmpl.render(the_vars)
+    # Render the main template
     logger.debug(f"The variables: {the_vars}")
-    print(tmpl.render(the_vars))
+    main_tmpl = env.get_template('$main')
+    print(main_tmpl.render(the_vars))
 
 
 def read_file(p) -> str:
@@ -50,7 +61,9 @@ def read_file(p) -> str:
 
 def read_dir(d) -> List[str]:
     contents = []
-    for p in os.listdir(d):
+    files = os.listdir(d)
+    files.sort()
+    for p in files:
         a_path = os.path.join(d, p)
         if os.path.isfile(a_path):
             contents.append(read_file(a_path))

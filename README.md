@@ -12,15 +12,29 @@ have any executable installed.
 
 Published as docker image: `sohoffice/tempalte-tools`
 
-Running example
-===============
+Template variables
+==================
 
-With docker
+General speaking the variables you can used come from the files inside the vars folder.
+With the addition of `env` to access the environment variables.
+
+The variables can be crossed referenced, but keep in mind they will be enhanced in the 
+order of variable name, alphabetically ascending. This means the below might not have
+the desired results, since VAR9 wasn't enhanced when VAR1 is being enhanced.
+
+VAR1 = `{{ VAR9 }}`
+VAR9 = `{{ env["FOO"] }}`
+
+Carefully design the template variables so that the dependency works.
+
+Running with docker
+===================
 
 ```
 docker run -it --rm \
     -v "$PWD/sample/main.tmpl:/app/main.tmpl" \
     -v "$PWD/sample/vars:/app/vars" \
+    --env "FOO=foo" \
     sohoffice/tempalte-tools:latest
 ```
 
@@ -32,8 +46,8 @@ Docker volumes
 | /app/main.tmpl | The main template file. Must be a Jinja2 file. |
 | /app/vars      | The directory to contain all variables.        |
 
-Usage
-=====
+Command line Usage
+==================
 
 ```
 Usage: main.py [OPTIONS] TMPL_FILE VAR_DIR
