@@ -6,11 +6,11 @@ Inspiration
 From time to time, we always have the need to run template for all developers. 
 However, having to install dependency such as mustache executable has been annoying.
 
-This tool is a perfect fit when packaged as a docker image. Inputs can be passed
-in via docker volume parameters. And those who need to run this doesn't have to 
-have any executable installed.
+This is why we think a tool packaged as a docker image is useful. Inputs can be passed
+in via docker volume parameters or environment variables. And those who need to run it 
+can just run the docker image without having to install any executable.
 
-Published as docker image: `sohoffice/tempalte-tools`
+The docker image is published as: `sohoffice/tempalte-tools`
 
 Template variables
 ==================
@@ -22,10 +22,22 @@ The variables can be crossed referenced, but keep in mind they will be enhanced 
 order of variable name, alphabetically ascending. This means the below might not have
 the desired results, since VAR9 wasn't enhanced when VAR1 is being enhanced.
 
+#### Bad example
+
+```
 VAR1 = `{{ VAR9 }}`
 VAR9 = `{{ env["FOO"] }}`
+```
 
-Carefully design the template variables so that the dependency works.
+Carefully design the template variable names so that the enhancement works in the right 
+order.
+
+#### Good example
+
+```
+VAR1 = `{{ env["FOO"] }}`
+VAR2 = `{{ VAR1 }}`
+```
 
 Running with docker
 ===================
@@ -70,3 +82,8 @@ Options:
   --help                   Show this message and exit.
 
 ```
+
+References
+==========
+
+- [Github project](https://github.com/sohoffice/sohoffice-template-tools)
